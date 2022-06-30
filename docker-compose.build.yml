@@ -1,8 +1,8 @@
 version: "3.8"
 services:
   web:
+    build: ./django-blog
     image: "${IMAGE_REPO_URL}:djangoblog"
-    command: "gunicorn --bind 0.0.0.0:${PORT} website.wsgi"
     environment:
       DOMAIN_NAME: "${DOMAIN_NAME}"
     ports:
