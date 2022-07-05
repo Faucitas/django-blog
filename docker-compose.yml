@@ -1,10 +1,14 @@
 version: "3.8"
 services:
   web:
+    build: ./app
     image: ${IMAGE_REPO_URL}:djangoblog
-    command: "gunicorn --bind 0.0.0.0:${PORT} website.wsgi"
-    ports:
-      - "8000:8000"
+    command: gunicorn --bind 0.0.0.0:${PORT} website.wsgi:application
+    volumes:
+      - ./app/:/app/
+      - static_volume:/app/static
+    expose:
+      - 8000
     environment:
       INSTANCE_DNS: ${INSTANCE_DNS}
       DB_NAME: ${DB_NAME}
@@ -13,14 +17,14 @@ services:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       DATABASE: ${DATABASE}
-#  nginx:
-#    build: ./nginx
-#    image: ${IMAGE_REPO}:django_nginx
-#    volumes:
-#      - static_volume:/usr/src/app/static
-#    ports:
-#      - 8000:80
-#    depends_on:
-#      - web
-#volumes:
-#  static_volume:
+  nginx:
+    build: ./nginx
+    image: ${IMAGE_REPO_URL}:django_nginx
+    volumes:
+      - static_volume:/app/static
+    ports:
+      - 8000:80
+    depends_on:
+      - web
+volumes:
+  static_volume:
