@@ -17,7 +17,7 @@ COPY requirements.txt .
 RUN python -m pip install -r requirements.txt
 
 # Copy application files
-COPY ./django-blog /app
+COPY . /app
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 
